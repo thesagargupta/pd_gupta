@@ -160,16 +160,78 @@ All content has fallback defaults in `lib/defaultContent.js`. Update Firestore o
 
 ## 🚀 Deployment
 
-### Deploy to Vercel
+### Deploy to Vercel (Easiest)
 
 1. Push code to GitHub
 2. Connect repository to Vercel
 3. Add environment variables in Vercel dashboard
 4. Deploy
 
+### Deploy to Hostinger VPS (Production)
+
+**Complete deployment guide available in:** [HOSTINGER_VPS_DEPLOYMENT.md](./HOSTINGER_VPS_DEPLOYMENT.md)
+
+#### Quick Deploy Steps:
+
+1. **Get Firebase Credentials:**
+   - See [GET_FIREBASE_CREDENTIALS.md](./GET_FIREBASE_CREDENTIALS.md) for detailed instructions
+
+2. **Connect to VPS:**
+   ```bash
+   ssh root@your-server-ip
+   cd /var/www/pd_gupta/pd_gupta
+   ```
+
+3. **Setup Environment:**
+   ```bash
+   cp .env.production.example .env.production
+   nano .env.production  # Add your Firebase credentials
+   chmod 600 .env.production
+   ```
+
+4. **Build and Deploy:**
+   ```bash
+   npm install
+   npm run build
+   pm2 start ecosystem.config.js
+   pm2 save
+   ```
+
+5. **Verify:**
+   ```bash
+   pm2 status
+   pm2 logs pd-gupta-website
+   ```
+
+#### Deploy Documentation:
+- 📘 [Complete VPS Deployment Guide](./HOSTINGER_VPS_DEPLOYMENT.md)
+- 📋 [Pre-Deployment Checklist](./PRE_DEPLOYMENT_CHECKLIST.md)
+- ⚡ [Quick Reference Commands](./DEPLOY_QUICK_REFERENCE.md)
+- 📝 [Deployment Summary](./DEPLOYMENT_SUMMARY.md)
+- 🔑 [Get Firebase Credentials](./GET_FIREBASE_CREDENTIALS.md)
+
+#### Build Commands:
 ```bash
-npm run build
-npm start
+npm run build  # Build for production
+npm start      # Start production server (requires build)
+npm run dev    # Development server (NOT for production)
+```
+
+### Common Deployment Issues
+
+**Firebase Invalid API Key Error:**
+- Ensure `.env.production` exists with valid Firebase credentials
+- Rebuild after adding credentials: `npm run build`
+- Restart: `pm2 restart pd-gupta-website`
+
+**Missing Build Error:**
+- Always run `npm run build` before starting production server
+- Use PM2 for production (not `npm run dev`)
+
+**Port Already in Use:**
+```bash
+lsof -ti:3000 | xargs kill -9  # Kill process on port 3000
+pm2 restart pd-gupta-website
 ```
 
 ## 📝 Usage

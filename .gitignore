@@ -25,9 +25,19 @@ yarn-error.log*
 # local env files
 .env*.local
 .env
+.env.production
+
+# Keep example files
+!.env.production.example
+!.env.local.example
 
 # vercel
 .vercel
+
+# pm2 logs
+logs/
+.pm2/
+*.log
 
 # typescript
 *.tsbuildinfo
