@@ -7,32 +7,44 @@ import { Calendar, User, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
 export const revalidate = 60;
+export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  const blogs = await getAllBlogs();
-  return blogs.map((blog) => ({
-    slug: blog.slug,
-  }));
+  try {
+    const blogs = await getAllBlogs();
+    return blogs.map((blog) => ({
+      slug: blog.slug,
+    }));
+  } catch (error) {
+    console.log('Error generating static params for blogs:', error);
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }) {
-  const blog = await getBlogBySlug(params.slug);
-  
-  if (!blog) {
+  try {
+    const blog = await getBlogBySlug(params.slug);
+    
+    if (!blog) {
+      return {
+        title: 'Blog Not Found',
+      };
+    }
+
+    return {
+      title: `${blog.title} - PD Gupta & CO Blog`,
+      description: blog.summary || blog.excerpt || blog.title,
+      openGraph: {
+        title: blog.title,
+        description: blog.summary || blog.excerpt,
+        images: blog.image ? [blog.image] : [],
+      },
+    };
+  } catch (error) {
     return {
       title: 'Blog Not Found',
     };
   }
-
-  return {
-    title: `${blog.title} - PD Gupta & CO Blog`,
-    description: blog.summary || blog.excerpt || blog.title,
-    openGraph: {
-      title: blog.title,
-      description: blog.summary || blog.excerpt,
-      images: blog.image ? [blog.image] : [],
-    },
-  };
 }
 
 export default async function BlogPostPage({ params }) {
