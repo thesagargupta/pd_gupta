@@ -6,7 +6,11 @@ import { Toaster } from 'react-hot-toast';
 import ScrollRevealProvider from '@/components/ScrollRevealProvider';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ 
+  subsets: ['latin'],
+  display: 'swap',
+  fallback: ['system-ui', 'arial']
+});
 
 export const metadata = {
   title: 'PD Gupta & CO - Chartered Accountants',

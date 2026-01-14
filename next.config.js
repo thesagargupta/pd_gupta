@@ -8,6 +8,9 @@ const nextConfig = {
   // Production optimizations
   swcMinify: true,
   
+  // Skip font optimization if network issues occur
+  optimizeFonts: false,
+  
   // Allowed origins for development (only applies in dev mode)
   async headers() {
     return [
